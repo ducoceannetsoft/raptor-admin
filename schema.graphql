@@ -1,0 +1,68 @@
+type Integrator {
+  id: String!
+  first_name: String!
+  last_name: String!
+  email: String!
+  phone: String!
+  company_name: String
+  address: String
+  city: String
+  state: String
+  zip_code: String
+  country: String
+  shipping_address: String
+  website_url: String
+  company_size: Int
+  clients: [Client]
+}
+
+type Client {
+  id: String!
+  first_name: String!
+  last_name: String!
+  email: String!
+  phone: String!
+  company_name: String
+  address: String
+  city: String
+  state: String
+  zip_code: String
+  country: String
+  shipping_address: String
+  website_url: String
+  company_size: Int
+  integrator_id: String
+  integrator: Integrator
+  sites: [Site]
+}
+
+type Site {
+  name: String!
+  address: String
+  city: String
+  state: String
+  zip_code: String
+  country: String
+  status: Int
+  client_id: String!
+  client: Client!
+}
+
+type Query {
+  integrators: [Integrator]
+  clients: [Client]
+  sites: [Site]
+}
+
+type IntegratorMutationResponse {
+  success: Boolean!
+  message: String
+  integrator: Integrator
+}
+
+type Mutation {
+  upsertIntegrator(
+    first_name: String!
+    last_name: String!
+  ): IntegratorMutationResponse!
+}
