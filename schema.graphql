@@ -33,7 +33,24 @@ type Client {
   company_size: Int
   integrator_id: String
   integrator: Integrator
-  sites: [Site]
+  site: [Site]
+}
+
+input ClientInput {
+  first_name: String!
+  last_name: String!
+  email: String!
+  phone: String!
+  company_name: String
+  address: String
+  city: String
+  state: String
+  zip_code: String
+  country: String
+  shipping_address: String
+  website_url: String
+  company_size: Int
+  integrator_id: String
 }
 
 type Site {
@@ -49,8 +66,10 @@ type Site {
 }
 
 type Query {
-  integrators: [Integrator]
+  integrators(first_name: String): [Integrator]
   clients: [Client]
+  client(id: String!): Client
+  clientSearch(txtSearch: String): [Client]
   sites: [Site]
 }
 
@@ -65,4 +84,7 @@ type Mutation {
     first_name: String!
     last_name: String!
   ): IntegratorMutationResponse!
+  createClient(clientInput: ClientInput): Client
+  deleteClient(id: String!): Client
+  updateClient(id: String!, clientInput: ClientInput): Client!
 }
