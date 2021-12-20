@@ -1,17 +1,19 @@
-const get = () => {
-  return [
-    {
-      id: "mandatory value",
-      name: "mandatory value",
-      address: "optional value",
-      city: "optional value",
-      state: "optional value",
-      zip_code: "optional value",
-      country: "optional value",
-      status: 1,
-      client_id: "mandatory value",
-    },
-  ];
+const Site = require("../models/Site");
+const get = async (searchText) => {
+  if (!searchText) return await Site.find({});
+  const res = await Site.find({
+    $or: [{ first_name: { $regex: searchText, $options: "i" } }],
+  });
+  return res;
 };
 
-module.exports = { get };
+const getById = async (args) => {
+  const { id } = args;
+  return Site.find({ id: id });
+};
+
+const deleteSite = (id) => {
+  return Site.findByIdAndRemove(id);
+};
+
+module.exports = { get, getById, deleteSite };

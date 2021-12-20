@@ -54,6 +54,7 @@ input ClientInput {
 }
 
 type Site {
+  id: String!
   name: String!
   address: String
   city: String
@@ -63,6 +64,17 @@ type Site {
   status: Int
   client_id: String!
   client: Client!
+}
+
+input SiteInput {
+  name: String!
+  address: String
+  city: String
+  state: String
+  zip_code: String
+  country: String
+  status: Int
+  client_id: String!
 }
 
 type Query {
@@ -78,7 +90,14 @@ type IntegratorMutationResponse {
   integrator: Integrator
 }
 
+type LoginStatus {
+  success: Boolean!
+  message: String
+}
+
 type Mutation {
+  login(email: String!, password: String!): LoginStatus!
+
   upsertIntegrator(
     first_name: String!
     last_name: String!
@@ -86,4 +105,8 @@ type Mutation {
   createClient(clientInput: ClientInput): Client!
   deleteClient(id: String!): Client!
   updateClient(id: String!, clientInput: ClientInput): Client!
+
+  createSite(siteInput: SiteInput): Site!
+  deleteSite(id: String!): Site!
+  updateSite(id: String!, siteInput: SiteInput): Site!
 }

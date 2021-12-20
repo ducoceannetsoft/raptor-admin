@@ -1,9 +1,10 @@
 const Client = require("./models/Client");
+const Site = require("./models/Site");
 
 module.exports = (intergratorService, clientService, siteService) => {
   const { get: getIntegrators } = intergratorService;
   const { get: getClients, getById, deleteClient } = clientService;
-  const { get: getSites } = siteService;
+  const { get: getSites, siteClient } = siteService;
   return {
     Query: {
       integrators: (___, args, _, __) => {
@@ -36,6 +37,18 @@ module.exports = (intergratorService, clientService, siteService) => {
       client: (site) => getSites().find((i) => i.id === site.client_id),
     },
     Mutation: {
+      login: async (_, args) => {
+        const { email, password } = args;
+        if (email === "admin@raptorvision.com" && password === "123456") {
+          return {
+            success: true,
+            message: JSON.stringify(args),
+          };
+        }
+        return {
+          success: false,
+        };
+      },
       upsertIntegrator: async (_, args) => {
         console.log("integrator", args);
         return {
@@ -43,18 +56,31 @@ module.exports = (intergratorService, clientService, siteService) => {
           message: JSON.stringify(args),
         };
       },
-      createClient: (parent, args) => {
+      createClient: async (parent, args) => {
         const { clientInput } = args;
         let client = new Client(clientInput);
-        return client.save();
+        return await client.save();
       },
-      deleteClient: (parent, args) => {
+      deleteClient: async (parent, args) => {
         const { id } = args;
-        return deleteClient(id);
+        return await deleteClient(id);
       },
-      updateClient: (parent, args) => {
+      updateClient: async (parent, args) => {
         const { id, clientInput } = args;
-        return Client.findByIdAndUpdate(id, clientInput, { new: true });
+        return await Client.findByIdAndUpdate(id, clientInput, { new: true });
+      },
+      createSite: async (parent, args) => {
+        const { siteInput } = args;
+        let site = new Site(siteInput);
+        return await Site.save();
+      },
+      deleteSite: async (parent, args) => {
+        const { id } = args;
+        return await deleteSite(id);
+      },
+      updateSite: async (parent, args) => {
+        const { id, siteInput } = args;
+        return await Client.findByIdAndUpdate(id, siteInput, { new: true });
       },
     },
   };
