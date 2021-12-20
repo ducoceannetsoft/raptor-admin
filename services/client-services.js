@@ -3,10 +3,10 @@ const get = async (searchText) => {
   if (!searchText) return await Client.find({});
   const res = await Client.find({
     $or: [
-      { first_name: { $regex: searchText } },
-      { last_name: { $regex: searchText } },
-      { address: { $regex: searchText } },
-      { phone: { $regex: searchText } },
+      { first_name: { $regex: searchText, $options: "i" } },
+      { last_name: { $regex: searchText, $options: "i" } },
+      { address: { $regex: searchText, $options: "i" } },
+      { phone: { $regex: searchText, $options: "i" } },
     ],
   });
   return res;
