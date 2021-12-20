@@ -1,11 +1,14 @@
 const Client = require("../models/Client");
 const get = async (searchText) => {
   console.log("@@@searchText: ", searchText);
-  if (!searchText) return Client.find({});
-  const res = Client.find({
-    first_name: { $regex: searchText },
-    last_name: { $regex: searchText },
-    phone: { $regex: searchText },
+  if (!searchText) return await Client.find({});
+  const res = await Client.find({
+    $or: [
+      { first_name: { $regex: searchText } },
+      { last_name: { $regex: searchText } },
+      { address: { $regex: searchText } },
+      { phone: { $regex: searchText } },
+    ],
   });
   return res;
 };
