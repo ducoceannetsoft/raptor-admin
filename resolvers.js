@@ -2,7 +2,7 @@ const Client = require("./models/Client");
 
 module.exports = (intergratorService, clientService, siteService) => {
   const { get: getIntegrators } = intergratorService;
-  const { get: getClients } = clientService;
+  const { get: getClients, getById, deleteClient } = clientService;
   const { get: getSites } = siteService;
   return {
     Query: {
@@ -12,8 +12,9 @@ module.exports = (intergratorService, clientService, siteService) => {
           (item) => item.first_name.indexOf(first_name) !== -1
         );
       },
-      clients: () => {
-        return getClients();
+      clients: (___, args, _, __) => {
+        const { txtSearch } = args;
+        return getClients(txtSearch);
       },
       sites: () => {
         return getSites();
@@ -21,17 +22,6 @@ module.exports = (intergratorService, clientService, siteService) => {
       client: (parent, args) => {
         const { id } = args;
         return Client.findById(id);
-      },
-      clientSearch: async (parent, args) => {
-        const { txtSearch } = args;
-        const allClient = await Client.find({});
-        console.log("@@allClient", allClient);
-        return allClient.filter(
-          (item) => 1 == 1
-          // item.first_name.indexOf(txtSearch) !== -1 ||
-          // item.last_name.indexOf(txtSearch) !== -1 ||
-          // item.shipping_address.indexOf(txtSearch) !== -1
-        );
       },
     },
     Integrator: {
@@ -60,7 +50,7 @@ module.exports = (intergratorService, clientService, siteService) => {
       },
       deleteClient: (parent, args) => {
         const { id } = args;
-        return Client.findByIdAndRemove(id);
+        return deleteClient(id);
       },
       updateClient: (parent, args) => {
         const { id, clientInput } = args;

@@ -67,9 +67,8 @@ type Site {
 
 type Query {
   integrators(first_name: String): [Integrator]
-  clients: [Client]
+  clients(txtSearch: String): [Client]
   client(id: String!): Client
-  clientSearch(txtSearch: String): [Client]
   sites: [Site]
 }
 
@@ -84,7 +83,7 @@ type Mutation {
     first_name: String!
     last_name: String!
   ): IntegratorMutationResponse!
-  createClient(clientInput: ClientInput): Client
-  deleteClient(id: String!): Client
+  createClient(clientInput: ClientInput): Client!
+  deleteClient(id: String!): Client!
   updateClient(id: String!, clientInput: ClientInput): Client!
 }
