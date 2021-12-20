@@ -4,7 +4,7 @@ const Site = require("./models/Site");
 module.exports = (intergratorService, clientService, siteService) => {
   const { get: getIntegrators } = intergratorService;
   const { get: getClients, getById, deleteClient } = clientService;
-  const { get: getSites, siteClient } = siteService;
+  const { get: getSites, getByClient, update: updateSite } = siteService;
   return {
     Query: {
       integrators: (___, args, _, __) => {
@@ -30,8 +30,12 @@ module.exports = (intergratorService, clientService, siteService) => {
         getClients().filter((c) => c.integrator_id === integrator.id),
     },
     Client: {
-      integrator: (client) =>
-        getIntegators().find((i) => i.id === client.integrator_id),
+      integrator: (client) => {
+        return getIntegators().find((i) => i.id === client.integrator_id);
+      },
+      sites: async (client) => {
+        return await getByClient(client.id);
+      },
     },
     Site: {
       client: (site) => getSites().find((i) => i.id === site.client_id),
@@ -67,12 +71,14 @@ module.exports = (intergratorService, clientService, siteService) => {
       },
       updateClient: async (parent, args) => {
         const { id, clientInput } = args;
+        console.log(args);
         return await Client.findByIdAndUpdate(id, clientInput, { new: true });
       },
       createSite: async (parent, args) => {
         const { siteInput } = args;
         let site = new Site(siteInput);
-        return await Site.save();
+        console.log("site input", siteInput);
+        return await site.save();
       },
       deleteSite: async (parent, args) => {
         const { id } = args;
@@ -80,7 +86,8 @@ module.exports = (intergratorService, clientService, siteService) => {
       },
       updateSite: async (parent, args) => {
         const { id, siteInput } = args;
-        return await Client.findByIdAndUpdate(id, siteInput, { new: true });
+        console.log("updateSite args", args);
+        return await Site.findByIdAndUpdate(id, siteInput, { new: true });
       },
     },
   };

@@ -7,13 +7,16 @@ const get = async (searchText) => {
   return res;
 };
 
-const getById = async (args) => {
-  const { id } = args;
-  return Site.find({ id: id });
+const getById = async (id) => {
+  return await Site.find({ id: id });
+};
+
+const getByClient = async (clientId) => {
+  return await Site.find({ client_id: clientId });
 };
 
 const deleteSite = (id) => {
   return Site.findByIdAndRemove(id);
 };
 
-module.exports = { get, getById, deleteSite };
+module.exports = { get, getById, deleteSite, getByClient };

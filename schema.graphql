@@ -33,7 +33,7 @@ type Client {
   company_size: Int
   integrator_id: String
   integrator: Integrator
-  site: [Site]
+  sites: [Site]
 }
 
 input ClientInput {
