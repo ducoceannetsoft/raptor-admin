@@ -67,7 +67,7 @@ type Site {
 
 type Query {
   integrators(first_name: String): [Integrator]
-  clients(txtSearch: String): [Client]
+  clients(searchText: String): [Client]
   client(id: String!): Client
   sites: [Site]
 }

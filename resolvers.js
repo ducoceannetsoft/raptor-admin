@@ -12,9 +12,9 @@ module.exports = (intergratorService, clientService, siteService) => {
           (item) => item.first_name.indexOf(first_name) !== -1
         );
       },
-      clients: (___, args, _, __) => {
-        const { txtSearch } = args;
-        return getClients(txtSearch);
+      clients: async (___, args, _, __) => {
+        const { searchText } = args;
+        return await getClients(searchText);
       },
       sites: () => {
         return getSites();
