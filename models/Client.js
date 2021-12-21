@@ -52,5 +52,8 @@ const schema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Site",
   },
+  status: {
+    type: String,
+  },
 });
 module.exports = Client = mongoose.model("client", schema);

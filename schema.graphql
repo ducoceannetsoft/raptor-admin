@@ -12,7 +12,7 @@ type Integrator {
   country: String
   shipping_address: String
   website_url: String
-  company_size: Int
+  company_size: String
   clients: [Client]
 }
 
@@ -30,7 +30,8 @@ type Client {
   country: String
   shipping_address: String
   website_url: String
-  company_size: Int
+  company_size: String
+  status: String
   integrator_id: String
   integrator: Integrator
   sites: [Site]
@@ -49,8 +50,9 @@ input ClientInput {
   country: String
   shipping_address: String
   website_url: String
-  company_size: Int
+  company_size: String
   integrator_id: String
+  status: String
 }
 
 type Site {
